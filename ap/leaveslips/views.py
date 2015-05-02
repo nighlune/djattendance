@@ -7,9 +7,10 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from rest_framework import viewsets
 
-from .models import LeaveSlip, IndividualSlip, GroupSlip, IndividualSlipForm, GroupSlipForm
+from .models import LeaveSlip, IndividualSlip, GroupSlip
+from .forms import IndividualSlipForm, GroupSlipForm
 from .serializers import IndividualSlipSerializer, GroupSlipSerializer
-from accounts.models import Profile
+from accounts.models import Profile, Trainee
 
 # individual slips
 class IndividualSlipCreate(generic.CreateView):
@@ -42,17 +43,17 @@ class IndividualSlipDelete(generic.DeleteView):
 
 # group slips
 class GroupSlipCreate(generic.CreateView):
-	model = GroupSlip
-	template_name = 'leaveslips/group_create.html'
-	form_class = GroupSlipForm
-
-        def form_valid(self, form):
-            self.object = form.save(commit=False)
-            self.object.status = 'P'
-            self.object.trainee = self.request.user.trainee
-            self.object.TA = self.request.user.trainee.TA
-            self.object.save()
-            return super(generic.CreateView, self).form_valid(form)
+    model = GroupSlip
+    template_name = 'leaveslips/group_create.html'
+    form_class = GroupSlipForm
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.status = 'P'
+        self.object.trainee = self.request.user.trainee
+        self.object.TA = self.request.user.trainee.TA
+        self.object.save()
+        return super(generic.CreateView, self).form_valid(form)
 
 
 class GroupSlipDetail(generic.DetailView):
@@ -75,14 +76,14 @@ class LeaveSlipList(generic.ListView):
     model = IndividualSlip, GroupSlip
     template_name = 'leaveslips/list.html'
 
-
     def get_queryset(self):
-         individual=IndividualSlip.objects.filter(trainee=self.request.user.id).order_by('status')
-         group=GroupSlip.objects.filter(trainee=self.request.user.id).order_by('status') #if trainee is in a group leaveslip submitted by another user
+         individual=IndividualSlip.objects.filter(trainee=self.request.user.trainee.id).order_by('status')
+         group=GroupSlip.objects.filter(trainee=self.request.user.trainee.id).order_by('status') #if trainee is in a group leaveslip submitted by another user
          queryset= chain(individual,group) #combines two querysets
          return queryset
 
 
+""" API Views """
 
 class IndividualSlipViewSet(viewsets.ModelViewSet):
     queryset = IndividualSlip.objects.all()

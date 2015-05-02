@@ -65,8 +65,12 @@ class DisciplineListView(ListView):
     #profile is the user that's currently logged in
     def get_context_data(self, **kwargs):
         context = super(DisciplineListView, self).get_context_data(**kwargs)
-        current_date = datetime.datetime.now().date()
-        context['current_period'] = Period(Term.current_term()).period_of_date(datetime.datetime.now().date())
+        try:
+            context['current_period'] = Period(Term.current_term()).period_of_date(datetime.datetime.now().date())
+        except ValueError:
+            # ValueError thrown if current date is not in term (interim)
+            # return last period of previous period
+            context['current_period'] = Period.last_period()
         return context
 
 

@@ -14,7 +14,8 @@ from schedules.models import Schedule, Event
 from leaveslips.models import IndividualSlip, GroupSlip
 from terms.models import Term
 from accounts.models import User
-from leaveslips.models import IndividualSlip, IndividualSlipForm
+from leaveslips.models import IndividualSlip
+from leaveslips.forms import IndividualSlipForm
 
 
 class AttendancePersonal(TemplateView):

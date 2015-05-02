@@ -16,7 +16,7 @@ def home(request):
 
     if hasattr(request.user, 'trainee'):
         try:
-            data['schedule'] = request.user.trainee.schedule_set.get(term=Term.current_term())
+            data['schedule'] = request.user.trainee.schedule.get(term=Term.current_term())
         except ObjectDoesNotExist:
             pass
         for discipline in request.user.trainee.discipline_set.all():

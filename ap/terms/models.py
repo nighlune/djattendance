@@ -79,6 +79,10 @@ class Term(models.Model):
         Term.objects.filter(current=True).update(current=False)
         term.current = True
 
+    @staticmethod
+    def decode(code):
+        """ Decode term shorthand (e.g. Sp15) """
+        return Term.objects.filter(year__endswith=code[2:]).get(season__startswith=code[:2])
 
     def get_date(self, week, day):
         """ return an absolute date for a term week/day pair """
@@ -93,9 +97,6 @@ class Term(models.Model):
         # if not within the dates the term, raise an error
         else:
             raise ValueError('Invalid date for this term: ' + str(date))
-
-    def get_absolute_url(self):
-        return reverse('terms:detail', kwargs={'code': self.code})
 
     def __unicode__(self):
         return self.name

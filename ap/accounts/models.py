@@ -132,7 +132,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email])
 
     def __unicode__(self):
-        return self.email
+        return "%s, %s <%s>" % (self.lastname, self.firstname, self.email) 
 
 
 class Profile(models.Model):

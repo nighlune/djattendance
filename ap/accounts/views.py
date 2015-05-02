@@ -49,12 +49,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TraineeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Trainee.objects.all()
+    queryset = Trainee.objects.filter(active=True)
     serializer_class = TraineeSerializer
 
 
 class TrainingAssistantViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TrainingAssistant.objects.all()
+    queryset = TrainingAssistant.objects.filter(active=True)
     serializer_class = TrainingAssistantSerializer
 
 
@@ -64,7 +64,7 @@ class TraineesByGender(generics.ListAPIView):
 
     def get_queryset(self):
         gender = self.kwargs['gender']
-        return Trainee.objects.filter(account__gender=gender)
+        return Trainee.objects.filter(account__gender=gender).filter(active=True)
 
 
 class TraineesByTerm(APIView):
@@ -83,7 +83,7 @@ class TraineesByTeam(generics.ListAPIView):
 
     def get_queryset(self):
         team = self.kwargs['pk']
-        return Trainee.objects.filter(team__id=team)
+        return Trainee.objects.filter(team__id=team).filter(active=True)
 
 
 class TraineesByTeamType(generics.ListAPIView):
@@ -92,7 +92,7 @@ class TraineesByTeamType(generics.ListAPIView):
 
     def get_queryset(self):
         type = self.kwargs['type'].upper()
-        return Trainee.objects.filter(team__type=type)
+        return Trainee.objects.filter(team__type=type).filter(active=True)
 
 
 class TraineesByHouse(generics.ListAPIView):
@@ -101,7 +101,7 @@ class TraineesByHouse(generics.ListAPIView):
 
     def get_queryset(self):
         house = self.kwargs['pk']
-        return Trainee.objects.filter(house__id=house)
+        return Trainee.objects.filter(house__id=house).filter(active=True)
 
 
 class TraineesByLocality(generics.ListAPIView):
@@ -110,7 +110,7 @@ class TraineesByLocality(generics.ListAPIView):
 
     def get_queryset(self):
         locality = self.kwargs['pk']
-        return Trainee.objects.filter(locality__id=locality)
+        return Trainee.objects.filter(locality__id=locality).filter(active=True)
 
 
 class TraineesHouseCoordinators(generics.ListAPIView):
@@ -118,4 +118,4 @@ class TraineesHouseCoordinators(generics.ListAPIView):
     model = Trainee
 
     def get_queryset(self):
-        return Trainee.objects.filter(account__groups__name__iexact="house coordinators")
+        return Trainee.objects.filter(account__groups__name__iexact="house coordinators").filter(active=True)

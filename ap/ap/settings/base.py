@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     # admin third-party modules
     'adminactions',
     'suit',  # needs to be in front of 'django.contrib.admin'
+    'django_extensions',
 
     # django contrib
     'django.contrib.auth',
@@ -246,4 +247,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
+}
+
+SUIT_CONFIG = {
+    # header
+    'ADMIN_NAME': 'FTTA Admin',
+    'LIST_PER_PAGE': 20,
 }

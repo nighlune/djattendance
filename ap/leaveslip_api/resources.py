@@ -8,7 +8,8 @@ from tastypie.authorization import Authorization
 
 from accounts.models import Profile, User, Trainee, TrainingAssistant
 from attendance.models import Roll
-from leaveslips.models import LeaveSlip, IndividualSlip, GroupSlip, IndividualSlipForm
+from leaveslips.models import LeaveSlip, IndividualSlip, GroupSlip
+from leaveslips.forms import IndividualSlipForm
 from schedules.models import Event
 
 

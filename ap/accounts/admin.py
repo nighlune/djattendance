@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import User, Trainee, TrainingAssistant
 from aputils.admin import VehicleInline, EmergencyInfoInline
+from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
 """" ACCOUNTS admin.py """
 
@@ -181,7 +182,19 @@ class FirstTermMentorListFilter(SimpleListFilter):
 			return q
 
 
-class TraineeAdmin(admin.ModelAdmin):
+class TraineeAdmin(ForeignKeyAutocompleteAdmin):
+
+    # User is your FK attribute in your model
+    # first_name and email are attributes to search for in the FK model
+    related_search_fields = {
+        'account': ('firstname', 'lastname', 'email'),
+        'TA': ('account__firstname', 'account__lastname', 'account__email'),
+        'mentor': ('account__firstname', 'account__lastname', 'account__email'),
+        'spouse': ('account__firstname', 'account__lastname', 'account__email'),
+    }
+
+    search_fields = ['account__email', 'account__firstname', 'account__lastname']
+
     fieldsets = (
         (None, {
             'fields': (('account', 'active',), 'type', 'locality', 'term',
