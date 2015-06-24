@@ -30,29 +30,15 @@ class AnnouncementCreateView(View):
 			if user != None and send_to_all == False:
 				# sending the message to the user
 				user = User.objects.get(pk=user.account_id)
-				messages.add_message(request, constant_messages.INFO_PERSISTENT, message, user=user)
+				messages.add_message(request, constant_messages.INFO_PERSISTENT, message, user=user, extra_tags="announcement")
 			# announcement to multiple users
 			# announcement to all users
 			elif send_to_all == True:
 				for user in User.objects.all():
-					messages.add_message(request, constant_messages.INFO_PERSISTENT, message, user=user)
+					messages.add_message(request, constant_messages.INFO_PERSISTENT, message, user=user, extra_tags="announcement")
 			return HttpResponseRedirect(reverse_lazy('announcements:announcement_create'))
 		return render(request, self.template_name, {'form': form})
 
 	def get_context_data(self, **kwargs):
 		context = super(AnnouncementView, self).get_context_data(**kwargs)
 		return context
-
-	# def post(self, request, *args, **kwargs):
-	# 	if request.method == 'POST':
-	# 	# 	form = NewAnnouncementForm(request.POST)
-	# 	# 	if form.is_valid():
-	# 	# 		print form.cleaned_data['user']
-	# 	# 		print form.cleaned_data['send_to_all']
-	# 	# 		print form.cleaned_data['message']
-	# 	# 		return reverse_lazy('announcement_list')
-	# 	# else:
-	# 	# 	form = NewAnnouncementForm()
-	# 		print "I am in"
-	# 	return reverse_lazy('announcement_list')
-
