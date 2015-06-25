@@ -1,4 +1,4 @@
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from .forms import NewAnnouncementForm
 from django.contrib import messages
 from messages_extends import constants as constant_messages
@@ -9,11 +9,16 @@ from accounts.models import User
 
 
 class AnnouncementListView(View):
-	tempalte_name = 'announcements/announcement_list.html'
+	template_name = 'announcements/announcement_list.html'
 
-class AnnouncementCreateView(View):
+class AnnouncementCreateView(TemplateView):
 	template_name = 'announcements/announcement_create.html'
 	form_class = NewAnnouncementForm
+
+	def get_context_data(self, **kwargs):
+		context = super(AnnouncementCreateView, self).get_context_data(**kwargs)
+		context['number'] = 166
+		return context
 
 	def get(self, request, *args, **kwargs):
 		form = self.form_class()
@@ -39,6 +44,4 @@ class AnnouncementCreateView(View):
 			return HttpResponseRedirect(reverse_lazy('announcements:announcement_create'))
 		return render(request, self.template_name, {'form': form})
 
-	def get_context_data(self, **kwargs):
-		context = super(AnnouncementView, self).get_context_data(**kwargs)
-		return context
+
