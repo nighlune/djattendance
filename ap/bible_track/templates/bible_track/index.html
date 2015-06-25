@@ -5,12 +5,29 @@
 {% bootstrap_javascript %}
 {% bootstrap_messages %}
 {% block references %}
-<link rel="stylesheet" type="text/css" href="{% static 'leaveslips/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'bible_track/css/style.css' %}" />
 {% endblock %}
 
 {% block content %}
 
 <script type="text/javascript">
+/****** START UP ******/
+function isFirstYearCompleted(){
+	return "66"=={{first_year_is_complete}};
+}
+
+//Daily Bible reading is default page. Second-year bible reading disabled for first-year trainees.
+$( document ).ready(function() {
+	//var activeYear = {{year}};
+	//Disable Second-year tab for first-years?
+
+
+});
+
+/****** METHODS FOR DAILY BIBLE READING ******/
+
+
+/****** METHODS FOR FIRST AND SECOND YEAR BIBLE READING ******/
 function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -57,19 +74,7 @@ function modify_boxes(classname){
 var first_year_progress = {{first_year_progress}};
 var second_year_progress = {{second_year_progress}};
 function toggleCheckbox(classname, id, year) {
-	//document.getElementById("first-year-prog").style.width = "{{first_year_progress}}%";
-	//document.getElementById("first-year-prog").style.width = "3%";
-	//var test = request.session.get('name1');
-	
 	if (document.getElementsByClassName(classname)[0].checked == true ){
-	//window.alert("yea Jesus");
-	//$("#bible_track_form").submit();
-	//xmlhttp=new XMLHttpRequest();
-	//xmlhttp.open("POST", "{% url 'bible_track:index' %}", true);
-	//xmlhttp.send("book="+id);
-	//xmlhttp.send();
-	//post("{% url 'bible_track:index' %}", {'book': id});
-	//<input type="checkbox" onchange="toggleCheckbox({{choice.id}})" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
 		$.ajax({
 			type:"POST",
 			url: "{% url 'bible_track:index' %}",
@@ -82,15 +87,13 @@ function toggleCheckbox(classname, id, year) {
 			success: function(data){
 				$('#message').html("<h4>BIBLE SUPER SAVED : {{first_year_progress}}" +data+"</h4>");
 				if(year==1) {
-					document.getElementById("first-year-prog").style.width = data+"%";
-					document.getElementById("first-year-prog").innerHTML= data+"%";
-					//document.getElementById("first-year-prog").style.display = 'none';
-				    //document.getElementById("first-year-prog").style.display = 'block';
+					$("#first-year-prog").css("width", data+"%");
+					$("#first-year-prog").html(data+"%");
+					$("#first-year-prog").attr("aria-valuenow", data);
 				} else if(year==2) {
-					document.getElementById("second-year-prog").style.width = data+"%";
-					document.getElementById("second-year-prog").innerHTML= data+"%";
-					//document.getElementById("second-year-prog").style.display = 'none';
-				    //document.getElementById("second-year-prog").style.display = 'block';	
+					$("#second-year-prog").css("width", data+"%");
+					$("#second-year-prog").html(data+"%");
+					$("#second-year-prog").attr("aria-valuenow", data);
 				}
 			}
 		});		
@@ -107,15 +110,13 @@ function toggleCheckbox(classname, id, year) {
 		success: function(data){
 			$('#message').html("<h4>BIBLE SUPER DELETED: {{first_year_progress}}</h4>");
 			if(year==1) {
-				document.getElementById("first-year-prog").style.width = data+"%";
-				document.getElementById("first-year-prog").innerHTML= data+"%";
-				//document.getElementById("first-year-prog").style.display = 'none';
-				//document.getElementById("first-year-prog").style.display = 'block';
+				$("#first-year-prog").css("width", data+"%");
+				$("#first-year-prog").html(data+"%");
+				$("#first-year-prog").attr("aria-valuenow", data);
 			} else if(year==2) {
-				document.getElementById("second-year-prog").style.width = data+"%";
-				document.getElementById("second-year-prog").innerHTML= data+"%";
-				//document.getElementById("second-year-prog").style.display = 'none';
-				//document.getElementById("second-year-prog").style.display = 'block';
+				$("#second-year-prog").css("width", data+"%");
+				$("#second-year-prog").html(data+"%");
+				$("#second-year-prog").attr("aria-valuenow", data);
 			}
 		}
 	});	
@@ -124,130 +125,94 @@ function toggleCheckbox(classname, id, year) {
 		
 } 
 
-function toggleYear() {
-	var isFirstTabActive = document.getElementById("first-year-tab").className!="null";
-	if( isFirstTabActive ) {
-		console.log("YEA JESUUS1");
-		document.getElementById("second-year-tab").className = "active";
-		//document.getElementById("second-year-tab").style.fontSize="xx-large";
-		document.getElementById("first-year-tab").onclick=toggleYear;
-		document.getElementById("first-year-bible-reading").style.display = "none";
-		
-		document.getElementById("first-year-tab").className = null;
-		//document.getElementById("first-year-tab").style.fontSize="medium";
-		document.getElementById("second-year-tab").onclick=null;
-		document.getElementById("second-year-bible-reading").style.display = "block";				
-	} else {
-		console.log("YEA JESUUS2    " + document.getElementById("first-year-tab").className);
-		document.getElementById("first-year-tab").className = "active";
-		//document.getElementById("first-year-tab").style.fontSize="xx-large";
-		document.getElementById("second-year-tab").onclick=toggleYear;
-		document.getElementById("second-year-bible-reading").style.display = "none";
-		
-		document.getElementById("second-year-tab").className = null;
-		//document.getElementById("second-year-tab").style.fontSize="medium";
-		document.getElementById("first-year-tab").onclick=null;
-		document.getElementById("first-year-bible-reading").style.display = "block";			
-	}
-	return true;
-}
-
-function isFirstYearCompleted(){
-	return "66"=={{first_year_is_complete}};
-}
-
-$( document ).ready(function() {
-	//var activeYear = {{year}};
-	var activeYear = 2;
-
-    if( activeYear == 1 ) {
-		document.getElementById("first-year-tab").className = "active";
-		document.getElementById("second-year-tab").style.display = "none";
-		document.getElementById("second-year-bible-reading").style.display = "none";
-		//document.getElementById("first-year-tab").style.fontSize="xx-large";
-	} else {
-		if( isFirstYearCompleted() ) {
-			document.getElementById("first-year-tab").className = null;
-			document.getElementById("second-year-tab").className = "active";
-			//document.getElementById("second-year-tab").style.fontSize="xx-large";
-			document.getElementById("first-year-tab").onclick=toggleYear;
-			//document.getElementById("first-year-tab").style.fontSize="medium";
-			document.getElementById("first-year-bible-reading").style.display = "none";
-		} else {
-			document.getElementById("first-year-tab").className = "active";
-			//document.getElementById("first-year-tab").style.fontSize="xx-large";
-			document.getElementById("second-year-tab").onclick=toggleYear;
-			//document.getElementById("second-year-tab").style.fontSize="medium";
-			document.getElementById("second-year-bible-reading").style.display = "none";
-		}
-	}
-});
-
 </script>
 
-<ul class="nav nav-pills">
-  <li id="first-year-tab"  style="font-size:28px;" role="presentation"><a>First Year</a></li>
-  <li id="second-year-tab" style="font-size:28px;" role="presentation"><a>Second Year</a></li>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 25px;">
+  <li role="presentation" class="active"><a href="#daily-bible-reading" aria-controls="home" role="tab" data-toggle="tab">Daily Reading</a></li>
+  <li role="presentation"><a href="#first-year-bible-reading" aria-controls="profile" role="tab" data-toggle="tab">First Year</a></li>
+  <li role="presentation"><a href="#second-year-bible-reading" aria-controls="messages" role="tab" data-toggle="tab">Second Year</a></li>
 </ul>
-<!--<span style="font-size:36px">First Year</span><span style="padding-left:15px;font-size:12px">Second Year</span>-->
 
-<!--<h1>First Year</h1>
-<h5 style="color:gray">(Second Year)</h5>-->
+<!-- TAB PANES -->
+<div class="tab-content">
+	<!-- DAILY BIBLE READING -->
+	<div id="daily-bible-reading" class="bible-reading tab-pane active" role="tabpanel" >
+		<form name="dailyBibleReading" id="dailyBibleReadingEntry" method="post" action="">
+	    	<input type="hidden" name="traineeID" value="">
+			<!-- Pick a week of a term -->
+			<b>Week Of: </b>
+			<select id="select_menu" class="form-control" name="week" size="0" onchange="this.form.submit()">
+				{% for choice in bible_book_list %}
+					<option value='0'>Week 0: Feb 16 &mdash; Feb 22</option>
+				{% endfor %}
+			</select>
+			<br><br>
 
-<hr>
+			<!-- Description -->
+			<p>Valid Statuses: <b><u>C</u></b>ompleted, <b><u>M</u></b>ake-up, <b><u>N</u></b>ot Read</p>
+	    	<p>C: I <b>completed</b> 20 minutes of Bible reading for selected date. <br>
+	    	M: I <b>made up</b> 20 minutes of Bible reading for selected date. <br>
+	   		 N: I did <b>not</b> complete 20 minutes of Bible reading for selected date.</p><br>
 
-<div id="first-year-bible-reading" class="bible-reading" style="padding-left:15px;display:block; overflow: hidden;">
-	<div class="progress" style="max-width:500px;">
-  <div id="first-year-prog" class="progress-bar" role="progressbar" aria-valuenow="{{first_year_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{first_year_progress}}%;">{{first_year_progress}}%</div>
- </div>
-	<div class = "old-testament" style="width:300px; float:left">
-	<h4>Old Testament {{ current_time }}</h4>
-	{% for choice in latest_question_list|slice:":39" %}
-		<input class="first-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('first-year{{choice.id}}', {{choice.id}}, 1)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
-		<label style="font-weight: normal" for="choice{{ forloop.counter }}">{{ choice.toString }}</label><br />
+	   		<!-- Bible Reading Table --> 
+
+
+	   		<!-- Save and Finalize buttons -->
+	   		<input class="btn btn-default" type="submit" name="save" value="Save" />
+            <input class="btn btn-default" disabled="disabled" type="submit" name="finalize" Value="Finalize" onClick="javascript:return confirm('Are you sure you want to finalize?')">
+	   	</form>
+	</div>
+
+	<!-- FIRST YEAR BIBLE READING PAGE -->
+	<div id="first-year-bible-reading" class="bible-reading tab-pane" role="tabpanel">
+	  <div class="progress">
+	  <div id="first-year-prog" class="progress-bar" role="progressbar" aria-valuenow="{{first_year_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{first_year_progress}}%;">{{first_year_progress}}%</div>
+	 </div>
+		<div class = "old-testament">
+		<h4>Old Testament {{ current_time }}</h4>
+		{% for choice in bible_book_list|slice:":39" %}
+			<input class="first-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('first-year{{choice.id}}', {{choice.id}}, 1)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
+			<label style="font-weight: normal" for="choice{{ forloop.counter }}">{{ choice.toString }}</label><br />
+		{% endfor %}
+		</div>
+		<div class = "new-testament">
+		<h4>New Testament</h4>
+		{% for choice in bible_book_list|slice:"39:" %}
+			<input class="first-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('first-year{{choice.id}}', {{choice.id}}, 1)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
+			<label style="font-weight: normal" for="choice{{ forloop.counter }}"> {{ choice.toString }} </label><br />
+		{% endfor %}
+		</div>
+	</div>
+
+	<!-- Checking First-year boxes -->
+	{% for checked in first_year_checked_list %}
 		<script>
-          //modify_boxes(true,{{choice.id}});
-        </script>
+			modify_boxes("first-year{{checked.book.id}}");
+	    </script>
 	{% endfor %}
+
+	<!-- SECOND YEAR BIBLE READING PAGE -->
+	<div id="second-year-bible-reading" class="bible-reading tab-pane" role="tabpanel">
+		<div class="progress">
+	  <div id="second-year-prog" class="progress-bar" role="progressbar" aria-valuenow="{{second_year_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{second_year_progress}}%;">{{second_year_progress}}%</div>
+	 </div>
+		<div class = "new-testament">
+		<h4>New Testament</h4>
+		{% for choice in bible_book_list|slice:"39:" %}
+			<input class="second-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('second-year{{choice.id}}', {{choice.id}}, 2)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
+			<label style="font-weight: normal" for="choice{{ forloop.counter }}">{{ choice.toString }}</label><br />
+		{% endfor %}
+		</div>
 	</div>
-	<div class = "new-testament" style="width:300px; float:left">
-	<h4>New Testament</h4>
-	{% for choice in latest_question_list|slice:"39:" %}
-		<input class="first-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('first-year{{choice.id}}', {{choice.id}}, 1)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
-		<label style="font-weight: normal" for="choice{{ forloop.counter }}"> {{ choice.toString }} </label><br />
+
+	<!-- Checking Second-year boxes -->
+	{% for checked in second_year_checked_list %}
+		<script>
+			modify_boxes("second-year{{checked.book.id}}");
+	    </script>
 	{% endfor %}
-	</div>
+</div>
+
 <div id="message" style="float:left"></div>
-</div>
-<!-- Checking First-year boxes -->
-{% for checked in first_year_checked_list %}
-	<script>
-		modify_boxes("first-year{{checked.book.id}}");
-    </script>
-{% endfor %}
-
-<!-- SECOND YEAR BIBLE READING -->
-<div id="second-year-bible-reading" class="bible-reading" style="padding-left:15px;display:block">
-	<div class="progress"  style="max-width:500px;">
-  <div id="second-year-prog" class="progress-bar" role="progressbar" aria-valuenow="{{second_year_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{second_year_progress}}%;">{{second_year_progress}}%</div>
- </div>
-	<div class = "new-testament" style="width:300px; float:left">
-	<h4>New Testament</h4>
-	{% for choice in latest_question_list|slice:"39:" %}
-		<input class="second-year{{choice.id}}" type="checkbox" onchange="toggleCheckbox('second-year{{choice.id}}', {{choice.id}}, 2)" name="book" id="{{ choice.id }}" value="{{ choice.id }}" />
-		<label style="font-weight: normal" for="choice{{ forloop.counter }}">{{ choice.toString }}</label><br />
-	{% endfor %}
-	</div>
-	<div id="message" style="float:left"></div>
-</div>
-
-<!-- Checking Second-year boxes -->
-{% for checked in second_year_checked_list %}
-	<script>
-		modify_boxes("second-year{{checked.book.id}}");
-    </script>
-{% endfor %}
-
-
-
 {% endblock %}

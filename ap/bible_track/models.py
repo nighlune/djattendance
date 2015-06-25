@@ -14,6 +14,20 @@ DATA MODELS:
 
 """
 
+class daily(models.Model):
+    STATUS_CHOICES = (
+        ('', 'No Input'),
+        ('C', 'Complete'),
+        ('M', 'Make up'),
+        ('N', 'No reading'),
+    )
+    trainee = models.ForeignKey(Trainee, null=True)
+    date = models.DateField() 
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES) 
+    finalized = models.IntegerField() 
+    def __str__(self):
+        return self.status;
+
 class bible_book(models.Model):
 
 	BIBLE_BOOKS = (

@@ -1,0 +1,14 @@
+.old-testament, .new-testament {
+	width:300px; 
+	float:left;
+}
+
+.progress {
+	max-width: 500px;
+}
+
+/* Overwrite bootstrap */
+#select_menu {
+	display: inline;
+	width: auto;
+}
