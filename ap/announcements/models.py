@@ -44,3 +44,4 @@ class TraineeMessage(models.Model):
 	trainee = models.ForeignKey(Trainee)
 
 	announcement = models.ForeignKey(Announcement)
+	

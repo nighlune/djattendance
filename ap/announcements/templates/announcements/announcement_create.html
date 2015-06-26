@@ -6,30 +6,7 @@
 
 {% block content %}
 
-	<h1>Announcement View</h1>
-
-	<div>
-		<div class="alert alert-info">
-			<a class="close" data-dismiss="alert">x</a>
-			Hi
-		</div>
-	</div>
-
-	<div id="messages">
-        {% for message in messages %}
-            <div class="alert 
-                {% if message.level_tag %} 
-                    alert-{{ message.level_tag }} 
-                {% else %}
-                    alert-info
-                {% endif %}">
-                <a class="close" data-dismiss="alert"{% if message.pk %} href="{% url "message_mark_read" message.pk %}"{% endif %}>×</a>
-                {{ message|safe }}
-            </div>
-        {% endfor %}
-    </div>
-
-    <h1> {{number}} </h1>
+	<h1>Create Announcement View</h1>
 
 	<form action="" method="post">
 		{% csrf_token %}

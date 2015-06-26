@@ -1,8 +1,14 @@
 from django import forms
-from accounts.models import Trainee
+from .models import Announcement
 
-class NewAnnouncementForm(forms.Form):
-	user = forms.ModelChoiceField(queryset=Trainee.objects.all(), required=False)
-	send_to_all = forms.NullBooleanField()
-	message = forms.CharField()
+class NewAnnouncementForm(forms.ModelForm):
+	
+	class Meta:
+		model = Announcement
+
+	def save(self, commit=True):
+		announcement = super(NewAnnouncementForm, self).save(commit=False)
+		if commit:
+			announcement.save()
+		return announcement
 
