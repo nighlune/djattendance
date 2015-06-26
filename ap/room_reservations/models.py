@@ -15,7 +15,6 @@ Data Models:
 
 """
 
-
 class Reservation(models.Model):
 
 	# room reserved
@@ -39,11 +38,58 @@ class Reservation(models.Model):
     # recurrence? T = all-term recurrence, F = only once
     repeat = models.BooleanField(default=False)
 
-    # starting time
-    # ending time
-    # currently looking into extending EventGroup to create repeating events...
+    # reservation group ID for recurring reservations
+    group = models.ForeignKey('ReservationGroup', blank=True, null=True, related_name="reservations")
+
+    # reservation starting time
+    start = models.DateTimeField(auto_now=False, auto_now_add=False)
+
+    # reservation ending time
+    end = models.DateTimeField(auto_now=False, auto_now_add=False)
 
 
+class ReservationGroup(models.Model):
+    ''' This is very similar to EventGroup and Event, but instead of extending those
+    models, we are duplicating them with slight changes. With this choice, changes to 
+    recurring reservations will not affect changes to events and vice versa.
+    '''
+
+    name = models.CharField(max_length=30)
+    # which days this event repeats, starting with Monday (0) through LD (6)
+    # i.e. an event that repeats on Tuesday and Thursday would be (1,3)
+    repeat = models.CommaSeparatedIntegerField(max_length=20)
+    # how many weeks this reservation repeats
+    # TODO: enforce value between 1-20 weeks
+    duration = models.PositiveSmallIntegerField()
+
+    def create_children(self, e):
+        # create repeating child Reservations
+
+        reservations = [] # list of reservations to create
+
+        for day in map(int, self.repeat.split(",")):
+            res = deepcopy(e)
+            res.pk = None
+            res.start = next_dow(res.start, day)
+            res.end = next_dow(res.end, day)
+            reservations.append(res)
+            for week in range(1, self.duration):
+                res_ = deepcopy(res)
+                res_.start += timedelta(7*week)
+                res_.end += timedelta(7*week)
+                reservations.append(res_)
+
+        Reservation.objects.bulk_create(reservations)
+
+    def delete(self, *args, **kwargs):
+        # override delete(): ensure all events in reservationgroup are also deleted
+        Reservation.objects.filter(reservationgroup=self.id).delete()
+        super(ReservationGroup, self).delete(*args, **kwargs)
 
 
+    # def update(self, *args, **kwargs):
+        # super(ReservationGroup, self).update(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.name + " group"
 
