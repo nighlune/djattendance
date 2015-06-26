@@ -8,42 +8,44 @@
 
 	<h1>Announcement View</h1>
 
-<div class="panel-group" id="accordion">
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h2 class="panel-title">
-				Announcements
-			</h2>
-            <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
-		</div>
-		<div class="panel-body">
-			<ul class="list-group">
-			{% for announcement in object_list %}
-		        <a href="#" class="list-group-item col-md-12">
-		            <div class="col-md-12">
-		                <h3>{{announcement.message}}</h3>
-		                <div>
-		                    <span class="badge alert-info">{{announcement.date}}</span>
-		                    <div class="pull-right">        
-		                        <form action="#" method="get">
-		                            {% csrf_token %}
-		                            <button type="submit" class="btn btn-success btn-xs">Edit</button>
-		                        </form>
-		                    </div>
-		                </div>
-		            </div>
-		        </a>
-		    {% endfor %}
-		    </ul>
-	    </div>
-    </div>
-</div>
-
 	<form action="{% url 'announcements:announcement_create' %}" method="post">
 		{% csrf_token %}
 		<div class="pull-right">
 			<button class="btn btn-success">Create Announcement</button>
 		</div>
 	</form>
+
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">
+					Announcements
+				</h2>
+	            <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+			</div>
+			<div class="panel-body">
+				<ul class="list-group">
+				{% for announcement in object_list %}
+			        <a href="{% url 'announcements:announcement_detail' announcement.pk %}" class="list-group-item col-md-12">
+			            <div class="col-md-12">
+			                <h3>{{announcement.message}}</h3>
+			                <div>
+			                    <span class="badge alert-info">{{announcement.date}}</span>
+			                    <div class="pull-right">        
+			                        <form action="{% url 'announcements:announcement_delete' announcement.pk %}" method="get">
+			                            {% csrf_token %}
+			                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+			                        </form>
+			                    </div>
+			                </div>
+			            </div>
+			        </a>
+			    {% endfor %}
+			    </ul>
+		    </div>
+	    </div>
+	</div>
+
+
 
 {% endblock %}

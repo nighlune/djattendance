@@ -9,7 +9,7 @@
     <div id="messages">
         {% for trainee_message in user.trainee.traineemessage_set.all %}
             <div class="alert alert-info">
-                <a class="close" data-dismiss="alert">x</a>
+                <a class="close" data-dismiss="alert">×</a>
                 {{trainee_message.announcement.message}}
             </div>
         {% endfor %}

@@ -1,6 +1,8 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView
+
 
 from django.db import IntegrityError
 from django.db import transaction
@@ -27,6 +29,15 @@ class AnnouncementListView(ListView):
 # 	form_class = NewAnnouncementForm
 # 	success_url = reverse_lazy('announcements:announcement_list')
 # 	success_message = "Announcement Has Been Made!"
+
+class AnnouncementDetailView(DetailView):
+	template_name = 'announcements/announcement_detail.html'
+	model = Announcement
+
+class AnnouncementDeleteView(SuccessMessageMixin, DeleteView):
+	template_name = 'announcements/announcement_delete.html'
+	model = Announcement
+	success_url = reverse_lazy('announcements:announcement_list')
 
 
 class AnnouncementCreateView(TemplateView):
