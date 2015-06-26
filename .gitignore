@@ -9,3 +9,7 @@ venv
 *.sublime-project
 *.sublime-workspace
 ap/ap/settings/local.py
+Vagrantfile
+.vagrant/
+hello-world
+vagrant-is-working
