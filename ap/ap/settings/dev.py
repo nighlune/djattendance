@@ -3,10 +3,8 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-INSTALLED_APPS += ('django_extensions',
-                   'autofixture',
+INSTALLED_APPS += ('autofixture',
                    'debug_toolbar',
-                   'django_reset',
                    'django_nose',
                    'anonymizer',)
 

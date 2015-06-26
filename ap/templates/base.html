@@ -20,7 +20,6 @@
       <link href="{% static "css/base.css" %}" rel="stylesheet"> 
       <link href="{% static "css/offcanvas.css" %}" rel="stylesheet">
       {% bootstrap_css %}
-      {% bootstrap_messages %}
       {% block references %}
           <!-- additional css/refs here -->
       {% endblock references %}
@@ -128,15 +127,7 @@
         <!--CONTENT-->
         <div id="content" class="col-xs-12 col-sm-10">
 
-          {% block messages %}
-              <div id="messages">
-                {% if messages %}
-                  {% for message in messages %}
-                    {% bootstrap_messages message %}
-                  {% endfor %}
-                {% endif %}
-              </div>
-          {% endblock %}
+          {% bootstrap_messages %}
 
           {% block content %}
             <!-- CONTENT OF PAGE GOES HERE -->

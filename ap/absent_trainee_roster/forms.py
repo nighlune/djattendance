@@ -10,6 +10,7 @@ from accounts.models import Trainee
 class RosterForm(forms.ModelForm):
 	class Meta:
 		model = Roster
+		fields = '__all__'
 
 
 class AbsentTraineeForm(forms.ModelForm):
@@ -23,18 +24,18 @@ class AbsentTraineeForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		self.user = kwargs.pop('user', None)
 		super(AbsentTraineeForm, self).__init__(*args, **kwargs)
-		
+
 		if (self.user != None):
 			#Checks all the trainees in the same house as the user have an absentee profile and if not creates one
 			for trainee in Trainee.objects.filter(account__trainee__house=self.user.trainee.house):
 				obj, created = Absentee.objects.get_or_create(account=trainee.account)
-			
+
 			self.fields['absentee'].queryset = Absentee.objects.filter(account__trainee__house=self.user.trainee.house)
 		self.fields['absentee'].label = 'Name'
 		self.fields['absentee'].empty_label = '--Name--'
 		self.fields['absentee'].widget.attrs={'class': 'form-control'}
 		self.fields['reason'].widget.attrs={'class': 'form-control'}
-	
+
 
 class NewEntryFormSet(forms.models.BaseModelFormSet):
 	def __init__(self, *args, **kwargs):
@@ -47,7 +48,7 @@ class NewEntryFormSet(forms.models.BaseModelFormSet):
 	def forms(self):
 		forms = [self._construct_form(i, user=self.user) for i in xrange(self.total_form_count())]
 		return forms
-	
+
 	def clean(self):
 		#Checks that no two forms registers the same absentee.
 		if any(self.errors):

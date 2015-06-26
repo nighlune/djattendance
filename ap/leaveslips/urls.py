@@ -13,8 +13,7 @@ urlpatterns = patterns('',
     url(r'group/update/(?P<pk>\d+)$', views.GroupSlipUpdate.as_view(), name='group-update'),
     url(r'group/delete/(?P<pk>\d+)$', views.GroupSlipDelete.as_view(), name='group-delete'),
 
-    url(r'^$',views.LeaveSlipList.as_view(), name='leaveslips-list'),
-
+    url(r'^$', views.LeaveSlipList.as_view(), name='leaveslips-list'),
+    url(r'ta$', views.TALeaveSlipList.as_view(), name='ta-leaveslip-list'),
+    url(r'(?P<classname>individual|group)/(?P<status>[APFDS])/(?P<id>\d+)$', views.modify_status, name='modify-status'),
 )
-
-#     url(r'schedule/list/$', views.ScheduleList.as_view(), name='schedule-list'),

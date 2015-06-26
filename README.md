@@ -3,50 +3,28 @@
 [![Build Status](https://travis-ci.org/attendanceproject/djattendance.svg?branch=dev)](https://travis-ci.org/attendanceproject/djattendance) [![Coverage Status](https://coveralls.io/repos/attendanceproject/djattendance/badge.png?branch=dev)](https://coveralls.io/r/attendanceproject/djattendance?branch=dev)
 
 ## Summary
-Djattendance is a rewrite of the original FTTA attendance server in Python/Django. It supports many internal functions of the FTTA, for both trainees and administrators, such as:
+djattendance is a rewrite of the original PHP attendanceproj in Python/Django. It supports many internal functions of the [FTTA](ftta.org), for both trainees and administrators, such as:
 * Attendance
 * Service Scheduling
 * Life-studies
 * Class Syllabi
+* Exams & Grading
+* Room Reservations
 * etc.
 
 ## Architecture
-The original attendance server was based on a traditional LAMPstack. The new version is written in Python on top of the Django web framework (djangoproject.com) using Postgres and Nginx.
+The original attendance server was based on a traditional LAMPstack. The new version is written in Python using the Django web framework with a PostgreSQL backend. On the front-end we use Bootstrap and in some places, ReactJS.
 
-### Backend
-Python/Django
-Postgres
-Gunicorn
-Nginx
+### Apps (modules)
+Django modularizes a projects components into 'apps' which allow you separate out different aspects or features of your application. Generally, logically distinct features are contained within their own app and namespace (e.g. `attendance`, `leaveslips`, `lifestudies`), but we also have several 'core' apps that comprise the basic data model shared across the whole project (e.g. `accounts`, `houses`, `teams`, etc.).
 
-### Frontend
-HTML5 Boilerplate
-Bootstrap
-
-### Misc. Libraries
-Celery (using Redis)
-Memcached (deployment only)
+### Third-party packages
+We rely on a number of third-party Django apps to provide major functionality. Most notably: [django-suit](djangosuit.com/) (to skin the admin site), and [django rest framework](http://www.django-rest-framework.org/) (for API creation). 
 
 
-## Running djattendance
-A more detailed guide to running djattendance on your local machine can be found in the wiki (coming soon).
+## Contributing
+We welcome any contributions. Please get in touch with the [project owners](https://github.com/orgs/attendanceproject/teams/owners) and also review the [Contributor Guidelines](https://github.com/attendanceproject/djattendance/wiki/Contributor-Guidelines) page on the wiki.
 
-0. have Python and Postgres installed
-1. `git clone` the djattendance repo
-2. `pip install -r requirements.txt` from the `/requirements` (recommended that you use `virtualenv`)
-3. using django: `manage.py syncdb` and `manage.py runserver` (be sure to use the local settings)
+### Bootstrapping
+A more detailed guide to running djattendance on your local machine can be found in the [wiki](https://github.com/attendanceproject/djattendance/wiki/Development-Environment). A Unix environment is preferred (OS X, Ubuntu), and for Windows users, [Vagrant]() is probably the best option.
 
-
-## Running djattendance with vagrant
-NOTE: Folder that contains the vagrant file is synced as well, so all work is still done on the host.
-
-(NOTE FOR WINDOWS USERS: You will need to issue this command in git, "git config --global core.autocrlf input". See this for a list of issues related to CRLF and LF, http://blog.xjtian.com/post/54399466362/vagrant-tips-for-windows-users.)
-
-0. have VirtualBox and Vagrant installed
-1. `git clone` the djattendance repo
-2. Run 'vagrant up' within the project directory where the VagrantFile is located
-3. Run 'vagrant ssh' to access the VM
-4. 'cd ap'
-5. 'python manage.py syncdb --settings=ap.settings.dev'
-6. 'python manage.py runserver 0.0.0.0:8000 --settings=ap.settings.dev'
-7. From your host (not the guest VM) you can access the site from localhost:8111. 

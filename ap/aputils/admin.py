@@ -8,16 +8,17 @@ class AddressAdminForm(forms.ModelForm):
 
     class Meta:
         model = Address
+        fields = '__all__'
 
 
 class AddressAdmin(admin.ModelAdmin):
     form = AddressAdminForm
     list_display = (
-        'address1', 
-        'address2', 
-        'city', 
-        'zip_code', 
-        'zip4', 
+        'address1',
+        'address2',
+        'city',
+        'zip_code',
+        'zip4',
         'details'
     )
     ordering = ('address1', 'address2',)
@@ -29,6 +30,7 @@ class CityAdminForm(forms.ModelForm):
 
     class Meta:
         model = City
+        fields = '__all__'
 
 
 class CityAdmin(admin.ModelAdmin):

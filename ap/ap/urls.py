@@ -4,9 +4,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import login, logout_then_login
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from tastypie.api import Api
-from leaveslip_api.resources import IndividualSlipResource, GroupSlipResource, TraineeResource, TrainingAssistantResource, EventResource, RollResource
-
 from rest_framework import routers
 
 from accounts.views import *
@@ -59,18 +56,9 @@ urlpatterns += patterns('',
     url(r'^api/trainees/hc/$', TraineesHouseCoordinators.as_view()),
     url(r'^api/', include(router.urls)),
 
-    # tastypie leaveslips apis
-    url(r'^api/', include(EventResource().urls)),
-    url(r'^api/', include(GroupSlipResource().urls)),
-    url(r'^api/', include(IndividualSlipResource().urls)),
-    url(r'^api/', include(TrainingAssistantResource().urls)),
-    url(r'^api/', include(TraineeResource().urls)),
-    url(r'^api/', include(RollResource().urls)),
-
     #third party
     url(r'^explorer/', include('explorer.urls')),
     url(r'^select2/', include('django_select2.urls')),
-
 )
 
 urlpatterns += staticfiles_urlpatterns()

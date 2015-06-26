@@ -3,10 +3,10 @@ from .models import Syllabus, Session
 #from .widgets import DatepickerWidget, HorizRadioRenderer
 
 class NewSyllabusForm(forms.ModelForm):
-    
+
     class Meta:
         model = Syllabus
-        #fields = ('season', 'start', 'end')
+        fields = '__all__'
         #widgets = {
         #    'season': forms.RadioSelect(renderer=HorizRadioRenderer),
         #    'start': DatepickerWidget(),
@@ -28,17 +28,19 @@ class NewSyllabusForm(forms.ModelForm):
 ##        else:
             # error
         ## check if term code has duplicate??
-        
+
         if commit:
             syllabus.save()
         return syllabus
 
 class NewSessionForm(forms.ModelForm):
+
     class Meta:
         model = Session
+        fields = '__all__'
+        
     def save(self, commit=True):
         session = super(NewSessionForm, self).save(commit=False)
         if commit:
             session.save()
         return session
-

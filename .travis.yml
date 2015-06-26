@@ -1,24 +1,26 @@
 language: python
+cache: pip
 python:
 - 2.7
 addons:
   postgresql: '9.3'
+env:
+  - DJANGO_SETTINGS_MODULE=ap.settings.travis
 install:
-- pip install -r requirements/dev.txt
+  - pip install -r requirements/dev.txt
 before_script:
-- cp ap/ap/settings/travis.py ap/ap/settings/dev.py
-- psql -c 'create database djattendance;' -U postgres
-- sed -i -e 's/getpass.getuser()/"postgres"/g' ap/ap/settings/dev.py
-- python ap/manage.py syncdb --settings=ap.settings.dev --noinput
+  - psql -c 'create database djattendance;' -U postgres
+ # - python ap/manage.py makemigrations accounts aputils books classes houses localities rooms services teams terms attendance absent_trainee_roster dailybread leaveslips lifestudies meal_seating schedules syllabus verse_parse
 script:
-- coverage run ap/runtests.py
-- coverage report
+  - python ap/manage.py migrate --noinput
+#  - coverage run ap/runtests.py
+#  - coverage report
 notifications:
   email:
     recipients:
-    - lifeunion@gmail.com
-after_success:
-- coveralls
+      - attendanceproj@gmail.com
+#after_success:
+#  - coveralls
 deploy:
   provider: heroku
   api_key:

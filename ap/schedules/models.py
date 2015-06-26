@@ -140,7 +140,7 @@ class Schedule(models.Model):
     term = models.ForeignKey(Term)
 
     # which events are on this schedule
-    events = models.ManyToManyField(Event, null=True, blank=True)
+    events = models.ManyToManyField(Event, blank=True)
 
     def todays_events(self):
         today = datetime.combine(date.today(), time(0,0))

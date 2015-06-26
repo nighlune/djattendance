@@ -45,7 +45,7 @@ class Service(Group):
 
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category)
-    isActive = models.BooleanField()
+    isActive = models.BooleanField(default=True)
 
     # every service have different workload,
     # for example guard is much more intense than cleaning

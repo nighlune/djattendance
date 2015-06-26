@@ -30,7 +30,7 @@ class House(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER)
 
     # whether this house is actively used by the training
-    used = models.BooleanField()
+    used = models.BooleanField(default=True)
     
     #returns a query set of the empty bunks for this house
     def empty_bunk_count(self,position_list=[]):

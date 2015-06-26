@@ -4,10 +4,12 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.admin import Group, User
 from django.utils.translation import ugettext_lazy as _
+from django_select2 import *
 
-from .models import User, Trainee, TrainingAssistant
+from .models import User, Trainee, TrainingAssistant, Locality
 from aputils.admin import VehicleInline, EmergencyInfoInline
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
+
 
 """" ACCOUNTS admin.py """
 
@@ -182,34 +184,49 @@ class FirstTermMentorListFilter(SimpleListFilter):
 			return q
 
 
+# Adding a custom TraineeAdminForm to use prefetch_related all the locality many-to-many relationship
+# to pre-cache the relationships and squash all the n+1 sql calls.
+class TraineeAdminForm(forms.ModelForm):
+  class Meta:
+    model = Trainee
+    fields = '__all__'
+  locality = ModelSelect2MultipleField(queryset=Locality.objects.prefetch_related('city__state'),
+        required=False,
+        search_fields=['^city'],
+        widget=Select2MultipleWidget(
+            select2_options={
+                'width': '220px',
+            }
+        )) # could add state and country
+
+
 class TraineeAdmin(ForeignKeyAutocompleteAdmin):
+  form = TraineeAdminForm
 
-    # User is your FK attribute in your model
-    # first_name and email are attributes to search for in the FK model
-    related_search_fields = {
-        'account': ('firstname', 'lastname', 'email'),
-        'TA': ('account__firstname', 'account__lastname', 'account__email'),
-        'mentor': ('account__firstname', 'account__lastname', 'account__email'),
-        'spouse': ('account__firstname', 'account__lastname', 'account__email'),
-    }
+  # User is your FK attribute in your model
+  # first_name and email are attributes to search for in the FK model
+  related_search_fields = {
+      'account': ('firstname', 'lastname', 'email'),
+      'TA': ('account__firstname', 'account__lastname', 'account__email'),
+      'mentor': ('account__firstname', 'account__lastname', 'account__email'),
+      'spouse': ('account__firstname', 'account__lastname', 'account__email'),
+  }
 
-    search_fields = ['account__email', 'account__firstname', 'account__lastname']
+  search_fields = ['account__email', 'account__firstname', 'account__lastname']
 
-    fieldsets = (
-        (None, {
-            'fields': (('account', 'active',), 'type', 'locality', 'term',
-                ('date_begin', 'date_end',), ('married', 'spouse',),
-                ('TA', 'mentor',), 'team', ('house', 'bunk',), 'address',
-                'self_attendance',)
-        }),
-    )
-    list_display = ('__unicode__','current_term','_trainee_email','team', 'house',)
-    list_filter = ('active', CurrentTermListFilter,FirstTermMentorListFilter,)
-    inlines = [
-        VehicleInline, EmergencyInfoInline,
-    ]
-
-
+  fieldsets = (
+      (None, {
+          'fields': (('account', 'active',), 'type', 'locality', 'term',
+              ('date_begin', 'date_end',), ('married', 'spouse',),
+              ('TA', 'mentor',), 'team', ('house', 'bunk',), 'address',
+              'self_attendance',)
+      }),
+  )
+  list_display = ('__unicode__','current_term','_trainee_email','team', 'house',)
+  list_filter = ('active', CurrentTermListFilter,FirstTermMentorListFilter,)
+  inlines = [
+      VehicleInline, EmergencyInfoInline,
+  ]
 
 # Register the new Admin
 admin.site.register(User, APUserAdmin)

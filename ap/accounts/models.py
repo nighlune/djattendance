@@ -1,3 +1,4 @@
+from django.conf import settings
 from datetime import date
 
 from django.db import models
@@ -132,7 +133,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email])
 
     def __unicode__(self):
-        return "%s, %s <%s>" % (self.lastname, self.firstname, self.email) 
+        return "%s, %s <%s>" % (self.lastname, self.firstname, self.email)
 
 
 class Profile(models.Model):
@@ -144,7 +145,7 @@ class Profile(models.Model):
     """
 
     # each user should only have one of each profile
-    account = models.OneToOneField(User)
+    account = models.OneToOneField(settings.AUTH_USER_MODEL)
 
     # whether this profile is still active
     # e.g. if a trainee becomes a TA, they no longer need a service worker profile
@@ -158,12 +159,11 @@ class Profile(models.Model):
 
 class TrainingAssistant(Profile):
 
-    services = models.ManyToManyField(Service, blank=True, null=True)
-    houses = models.ManyToManyField(House, blank=True, null=True)
+    services = models.ManyToManyField(Service, blank=True)
+    houses = models.ManyToManyField(House, blank=True)
 
     def __unicode__(self):
         return self.account.get_full_name()
-
 
 class Trainee(Profile):
 
@@ -175,7 +175,7 @@ class Trainee(Profile):
 
     type = models.CharField(max_length=1, choices=TRAINEE_TYPES)
 
-    term = models.ManyToManyField(Term, null=True)
+    term = models.ManyToManyField(Term)
     date_begin = models.DateField()
     date_end = models.DateField(null=True, blank=True)
 
