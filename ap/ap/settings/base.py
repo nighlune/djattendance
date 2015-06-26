@@ -175,6 +175,7 @@ INSTALLED_APPS = (
     'leaveslips',
     'lifestudies',
     'meal_seating',
+    'room_reservations',
     'schedules',
     'syllabus',  # class syllabus
     'verse_parse',  # parse outlines for PSRP verses
