@@ -30,10 +30,6 @@ class AnnouncementListView(ListView):
 # 	success_url = reverse_lazy('announcements:announcement_list')
 # 	success_message = "Announcement Has Been Made!"
 
-class AnnouncementDetailView(DetailView):
-	template_name = 'announcements/announcement_detail.html'
-	model = Announcement
-
 class AnnouncementDeleteView(SuccessMessageMixin, DeleteView):
 	template_name = 'announcements/announcement_delete.html'
 	model = Announcement

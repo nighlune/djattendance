@@ -26,11 +26,12 @@
 			<div class="panel-body">
 				<ul class="list-group">
 				{% for announcement in object_list %}
-			        <a href="{% url 'announcements:announcement_detail' announcement.pk %}" class="list-group-item col-md-12">
+			        <a href="" class="list-group-item col-md-12">
 			            <div class="col-md-12">
 			                <h3>{{announcement.message}}</h3>
 			                <div>
 			                    <span class="badge alert-info">{{announcement.date}}</span>
+			                    <span class="badge alert-info">{{announcement.term}}</span>
 			                    <div class="pull-right">        
 			                        <form action="{% url 'announcements:announcement_delete' announcement.pk %}" method="get">
 			                            {% csrf_token %}

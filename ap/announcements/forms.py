@@ -5,6 +5,7 @@ class NewAnnouncementForm(forms.ModelForm):
 	
 	class Meta:
 		model = Announcement
+		exclude = ['announcer']
 
 	def save(self, commit=True):
 		announcement = super(NewAnnouncementForm, self).save(commit=False)
