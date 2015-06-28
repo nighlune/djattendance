@@ -8,10 +8,15 @@ If a request is denied or partially denied, a comment can be made by the person 
 """
 class LinensRequest(models.Model):
 
-	REQUEST_STATUS = (
+	REQUEST_RESPONSE = (
 		('A',		'Approved'),
 		('D',		'Denied'),
 		('P',		'Partial')
+	)
+
+	REQUEST_STATUS = (
+		('A',		'Active'),
+		('I',		'Inactive')
 	)
 
 	ITEM = (
@@ -50,18 +55,31 @@ class LinensRequest(models.Model):
 		('RWO', 'Ragged/Worn Out'),
 		('TRN', 'Torn'),
 		('MMP', 'Missing/Misplaced'),
-		('OTR', 'OTHER')
+		('OTR', 'Other')
 	)
 
+	#user in order to access house of user (if applicable): Trainee, serving sister, or TA
+	#TODO
+
+	#time stamp for sorting requests
 	date_requested = models.DateTimeField(auto_now_add=True)
 
+	#quantity of the requested item
 	quantity = models.SmallIntegerField(default=1)
 
+	#reponse to request: approved, denied, partial
+	response = models.CharField(max_length=1, choices=REQUEST_RESPONSE)
+
+	#status of the request: active or inactive
 	status = models.CharField(max_length=1, choices=REQUEST_STATUS)
 
 	item = models.CharField(max_length=4, choices=ITEM)
 
 	reason = models.CharField(max_lenth=3, choices=REASON)
+
+	reason_other = models.TextField(blank=True)
+
+	status_comment = models.TextField(blank=True)
 
 	def __unicode__(self):
 		return u' %s' % (self.name)
